@@ -126,11 +126,11 @@ def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_p
                 file_path = rgb_path+png_path
                 image = cv2.imread(file_path, cv2.IMREAD_UNCHANGED)  # Use cv2.IMREAD_UNCHANGED to read alpha channel
                 # Convert the image to a ROS Image message
-                image_msg = bridge.cv2_to_imgmsg(image, encoding="passthrough")
+                image_msg = bridge.cv2_to_imgmsg(image, encoding="bgr8")
                 time_image =  float(png_path.split('_')[0])
                 time_rgb_sec = int(time_image//1e6)
                 time_rgb_nsec = int(time_image%1e6*1000)
-                image_msg.header = Header(seq=idx, stamp=rospy.Time(time_rgb_sec, time_rgb_nsec), 
+                image_msg.header = Header(seq=idx_png, stamp=rospy.Time(time_rgb_sec, time_rgb_nsec), 
                                           frame_id="rgb")
                 bag.write('/rgb_topic', image_msg, t=rospy.Time(time_rgb_sec, time_rgb_nsec)) 
 
